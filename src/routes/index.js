@@ -1,5 +1,6 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch } from 'react-router-dom';
+import Route from './Route';
 
 import SignIn from '../pages/SignIn';
 
@@ -16,16 +17,18 @@ export default function Routes() {
     <Switch>
       <Route path="/" exact component={SignIn} />
 
-      <Route path="/dashboard" component={Dashboard} />
+      <Route path="/dashboard" component={Dashboard} isPrivate />
 
-      <Route path="/deliverymans" component={Deliverymans} />
-      <Route path="/deliverymanform" component={DeliverymanForm} />
-      <Route path="/deliveryproblems" component={DeliveryProblems} />
+      <Route path="/deliverymans" component={Deliverymans} isPrivate />
+      <Route path="/deliverymanform" component={DeliverymanForm} isPrivate />
+      <Route path="/deliveryproblems" component={DeliveryProblems} isPrivate />
 
-      <Route path="/recipients" component={Recipients} />
-      <Route path="/recipientform" component={RecipientForm} />
+      <Route path="/recipients" component={Recipients} isPrivate />
+      <Route path="/recipientform" component={RecipientForm} isPrivate />
 
-      <Route path="/orderform" component={OrderForm} />
+      <Route path="/orderform" component={OrderForm} isPrivate />
+
+      <Route path="/" component={() => <h1>404 - Page not found</h1>} />
     </Switch>
   );
 }
