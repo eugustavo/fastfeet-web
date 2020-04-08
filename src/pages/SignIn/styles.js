@@ -10,6 +10,23 @@ export const Container = styled.div`
   justify-content: center;
 `;
 
+export const Loading = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  height: 100%;
+  width: 100%;
+
+  background: #fff;
+
+  img {
+    width: 260px;
+    height: 260px;
+  }
+`;
+
 export const Content = styled.div`
   display: flex;
   flex-direction: column;
@@ -22,11 +39,11 @@ export const Content = styled.div`
 
   background: #fff;
   border-radius: 4px;
-  padding: 60px 30px;
+  padding: 50px 30px;
 
   img {
     width: 260px;
-    height: 45px;
+    /* height: 45px; */
   }
 
   form {
