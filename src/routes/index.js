@@ -5,12 +5,16 @@ import Route from './Route';
 import SignIn from '~/pages/SignIn';
 
 import Dashboard from '~/pages/Dashboard';
+
 import Deliverymans from '~/pages/Deliverymans';
-import DeliverymanForm from '~/pages/DeliverymanForm';
+import DeliverymanForm from '~/components/DeliverymanForm';
+
 import DeliveryProblems from '~/pages/DeliveryProblems';
+
 import Recipients from '~/pages/Recipients';
-import RecipientForm from '~/pages/RecipientForm';
-import OrderForm from '~/pages/OrderForm';
+import RecipientForm from '~/components/RecipientForm';
+
+import OrderForm from '~/components/OrderForm';
 
 export default function Routes() {
   return (

@@ -5,7 +5,6 @@ import { signInSuccess, signInFailure } from './actions';
 
 import api from '~/services/api';
 import history from '~/services/history';
-import { func } from 'prop-types';
 
 export function* signIn({ payload }) {
   try {
