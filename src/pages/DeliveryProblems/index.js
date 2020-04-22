@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import { FaSearch, FaPlus, FaEllipsisH, FaArrowLeft, FaArrowRight } from 'react-icons/fa'
+import React, { useState, useEffect } from 'react';
+import { FaEllipsisH, FaArrowLeft, FaArrowRight } from 'react-icons/fa'
 import api from '~/services/api';
 
 import {

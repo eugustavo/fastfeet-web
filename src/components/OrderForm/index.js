@@ -1,7 +1,15 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 
 // import { Container } from './styles';
 
 export default function OrderForm() {
-  return <h1>Cadastro/Edição de Encomendas</h1>;
+  let {state} = useLocation();
+  console.log(state);
+
+  return (
+    <h1>
+      {state ? state.order.product : 'Cadastrar nova encomenda'}
+    </h1>
+  );
 }

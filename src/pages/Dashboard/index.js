@@ -1,6 +1,17 @@
 import React, {useState, useEffect} from 'react';
+import { toast } from 'react-toastify';
+import { Link } from 'react-router-dom';
 import Avatar from 'react-avatar';
-import { FaSearch, FaPlus, FaEllipsisH, FaArrowLeft, FaArrowRight } from 'react-icons/fa'
+import {
+  FaSearch,
+  FaPlus,
+  FaEllipsisH,
+  FaArrowLeft,
+  FaArrowRight,
+  FaEye,
+  FaPen,
+  FaTrash,
+} from 'react-icons/fa'
 import api from '~/services/api';
 import history from '~/services/history';
 
@@ -12,11 +23,14 @@ import {
   Content,
   PageNavigate,
   Status,
+  Icon,
+  ActionsMenu,
  } from './styles';
 
 export default function Dashboard() {
   const [orders, setOrders] = useState([]);
   const [page, setPage] = useState(1);
+  const [visibleMenu, setVisibleMenu] = useState(0);
 
   useEffect(() => {
     async function loadOrders(){
@@ -68,6 +82,27 @@ export default function Dashboard() {
         : 'PENDENTE'
     }));
     setOrders(data);
+  }
+
+  function ToggleVisibleMenu(orderId) {
+    if(visibleMenu === orderId){
+      setVisibleMenu(0);
+    }
+    setVisibleMenu(orderId);
+  }
+
+  async function handleDelete(id) {
+    const confirm = window.confirm('Você realmente deseja excluir essa encomenda?');
+
+    if(confirm){
+      const response = await api.delete(`/orders/${id}`);
+
+      if(response.status === 200) {
+        toast.success("Encomenda deletada com sucesso!");
+      } else {
+        toast.error("Não foi possível deletar a encomenda");
+      }
+    }
   }
 
   return (
@@ -137,7 +172,43 @@ export default function Dashboard() {
                   </Status>
                 </td>
 
-                <td><button><FaEllipsisH/></button></td>
+                <td>
+                  <Icon>
+                    <button onClick={() => ToggleVisibleMenu(order.id)}>
+                        <FaEllipsisH />
+                    </button>
+                  </Icon>
+                  {visibleMenu === order.id
+                    &&
+                    <ActionsMenu>
+                      <button>
+                        <FaEye size={12} color="#7159c1"/>
+                        Visualizar
+                      </button>
+
+                      <hr />
+
+                      <button>
+                        <FaPen size={12} color="#4D85EE"/>
+                        <Link
+                          to={{
+                            pathname: "/orderform",
+                            state: { order }
+                          }}
+                        > Editar </Link>
+                      </button>
+
+                      <hr />
+
+                      <button
+                        onClick={() => handleDelete(order.id)}
+                      >
+                        <FaTrash size={12} color="#DE3B3B"/>
+                        Excluir
+                      </button>
+                    </ActionsMenu>
+                  }
+                </td>
               </tr>
             ))}
           </tbody>
