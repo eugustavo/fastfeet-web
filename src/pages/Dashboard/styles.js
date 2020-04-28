@@ -32,7 +32,7 @@ export const Actions = styled.div`
     align-items: center;
     transition: background 0.4s;
 
-    &:hover{
+    &:hover {
       background: ${darken(0.05, '#7159c1')};
     }
 
@@ -50,7 +50,7 @@ export const Search = styled.div`
 
   border-radius: 6px;
   border: 1px solid #ddd;
-  background: #FFF;
+  background: #fff;
 
   div {
     background: #fff;
@@ -64,7 +64,7 @@ export const Search = styled.div`
     border: 0;
     margin-left: 5px;
 
-    &::placeholder{
+    &::placeholder {
       font-size: 14px;
     }
   }
@@ -110,7 +110,8 @@ export const Content = styled.div`
       }
     }
 
-    th, td {
+    th,
+    td {
       padding: 10px;
       border-radius: 10px;
       text-align: left;
@@ -151,29 +152,33 @@ export const Status = styled.div`
   font-weight: bold;
   border-radius: 12px;
 
-  ${props => props.status==='PENDENTE' &&
+  ${(props) =>
+    props.status === 'PENDENTE' &&
     css`
-      background: #F0F0DF;
-      color: #C1BC35;
-  `}
+      background: #f0f0df;
+      color: #c1bc35;
+    `}
 
-  ${props => props.status==='ENTREGUE' &&
+  ${(props) =>
+    props.status === 'ENTREGUE' &&
     css`
-      background: #DFF0DF;
-      color: #2CA42B;
-  `}
+      background: #dff0df;
+      color: #2ca42b;
+    `}
 
-  ${props => props.status==='RETIRADA' &&
+  ${(props) =>
+    props.status === 'RETIRADA' &&
     css`
-      background: #BAD2FF;
-      color: #4D85EE;
-  `}
+      background: #bad2ff;
+      color: #4d85ee;
+    `}
 
-  ${props => props.status==='CANCELADA' &&
+  ${(props) =>
+    props.status === 'CANCELADA' &&
     css`
-      background: #FAB0B0;
-      color: #DE3B3B;
-  `}
+      background: #fab0b0;
+      color: #de3b3b;
+    `}
 
   div {
     width: 12px;
@@ -181,25 +186,29 @@ export const Status = styled.div`
     border-radius: 50%;
     margin-right: 5px;
 
-    ${props => props.status==='PENDENTE' &&
-    css`
-      background: #C1BC35;
-    `}
-
-    ${props => props.status==='ENTREGUE' &&
+    ${(props) =>
+      props.status === 'PENDENTE' &&
       css`
-        background: #2CA42B;
-    `}
+        background: #c1bc35;
+      `}
 
-    ${props => props.status==='RETIRADA' &&
+    ${(props) =>
+      props.status === 'ENTREGUE' &&
       css`
-        background: #4D85EE;
-    `}
+        background: #2ca42b;
+      `}
 
-    ${props => props.status==='CANCELADA' &&
+    ${(props) =>
+      props.status === 'RETIRADA' &&
       css`
-        background: #DE3B3B;
-    `}
+        background: #4d85ee;
+      `}
+
+    ${(props) =>
+      props.status === 'CANCELADA' &&
+      css`
+        background: #de3b3b;
+      `}
   }
 `;
 
@@ -210,51 +219,7 @@ export const Icon = styled.div`
 `;
 
 export const ActionsMenu = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 150px;
-  margin-top: 5px;
-
-  position: absolute;
-  background: ${darken(0.09, '#fff')};
-  right: 4.6%;
-  border-radius: 4px;
-  padding: 15px;
-  border: 1px solid #eee;
-
-  &::before {
-    content: '';
-    position: absolute;
-    left: calc(50% - 12px);
-    top: -10px;
-    width: 0;
-    height: 0;
-
-    border-left: 10px solid transparent;
-    border-right: 10px solid transparent;
-    border-bottom: 10px solid ${darken(0.09, '#fff')};
-  }
-
-  hr {
-    border: 1px solid ${darken(0.0, '#fff')};
-    width: 100%;
-    margin: 7px 0;
-  }
-
-  a {
-    color: #999;
-  }
-
-  button {
-    display: flex;
-    width: 100%;
-    flex-direction: row;
-    align-items: center;
-    color: #999;
-
-    svg {
-      margin-right: 5px;
-    }
-  }
+  position: relative;
+  top: 53px;
+  left: 37px;
 `;
-

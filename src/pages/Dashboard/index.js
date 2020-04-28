@@ -1,6 +1,4 @@
-import React, {useState, useEffect} from 'react';
-import { toast } from 'react-toastify';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 import Avatar from 'react-avatar';
 import {
   FaSearch,
@@ -8,10 +6,7 @@ import {
   FaEllipsisH,
   FaArrowLeft,
   FaArrowRight,
-  FaEye,
-  FaPen,
-  FaTrash,
-} from 'react-icons/fa'
+} from 'react-icons/fa';
 import api from '~/services/api';
 import history from '~/services/history';
 
@@ -25,85 +20,82 @@ import {
   Status,
   Icon,
   ActionsMenu,
- } from './styles';
+} from './styles';
+
+import ActionsToggleMenu from '~/components/ActionsToggleMenu';
 
 export default function Dashboard() {
   const [orders, setOrders] = useState([]);
   const [page, setPage] = useState(1);
-  const [visibleMenu, setVisibleMenu] = useState(0);
+  const [visibleMenu, setVisibleMenu] = useState(false);
+  const [visibleMenuId, setVisibleMenuId] = useState(0);
+  // const [visibleModal, setVisibleModal] = useState(false);
 
   useEffect(() => {
-    async function loadOrders(){
+    async function loadOrders() {
       const response = await api.get('/orders', {
         params: {
-          page
-        }
+          page,
+        },
       });
 
-      const data = response.data.map(order => ({
+      const data = response.data.map((order) => ({
         ...order,
-        status:
-          order.canceled_at ?
-            'CANCELADA'
-          : order.start_date && order.end_date ?
-            'ENTREGUE'
-          : order.start_date ?
-            'RETIRADA'
-          : 'PENDENTE'
+        status: order.canceled_at
+          ? 'CANCELADA'
+          : order.start_date && order.end_date
+          ? 'ENTREGUE'
+          : order.start_date
+          ? 'RETIRADA'
+          : 'PENDENTE',
       }));
       setOrders(data);
-      console.log(data);
     }
-
     loadOrders();
-  }, [page]);
+  }, [orders, page]);
 
   function handlePage(action) {
-    setPage( action === 'back' ? page - 1 : page + 1 );
+    setPage(action === 'back' ? page - 1 : page + 1);
   }
 
   async function filterOrder(search) {
     const response = await api.get('/orders', {
       params: {
         page,
-        findProduct: search
-      }
+        findProduct: search,
+      },
     });
 
-    const data = response.data.map(order => ({
+    const data = response.data.map((order) => ({
       ...order,
-      status:
-        order.canceled_at ?
-          'CANCELADA'
-        : order.start_date && order.end_date ?
-          'ENTREGUE'
-        : order.start_date ?
-          'RETIRADA'
-        : 'PENDENTE'
+      status: order.canceled_at
+        ? 'CANCELADA'
+        : order.start_date && order.end_date
+        ? 'ENTREGUE'
+        : order.start_date
+        ? 'RETIRADA'
+        : 'PENDENTE',
     }));
     setOrders(data);
   }
 
-  function ToggleVisibleMenu(orderId) {
-    if(visibleMenu === orderId){
-      setVisibleMenu(0);
+  function ToggleVisibleMenu(id) {
+    if (visibleMenu && visibleMenuId !== id) {
+      setVisibleMenuId(id);
     }
-    setVisibleMenu(orderId);
-  }
-
-  async function handleDelete(id) {
-    const confirm = window.confirm('Você realmente deseja excluir essa encomenda?');
-
-    if(confirm){
-      const response = await api.delete(`/orders/${id}`);
-
-      if(response.status === 200) {
-        toast.success("Encomenda deletada com sucesso!");
-      } else {
-        toast.error("Não foi possível deletar a encomenda");
-      }
+    if (visibleMenu && visibleMenuId === id) {
+      setVisibleMenu(false);
+      setVisibleMenuId(0);
+    } else {
+      setVisibleMenu(true);
+      setVisibleMenuId(id);
     }
   }
+
+  // function handleToggleModal() {
+  //   setVisibleModal(!visibleModal);
+  //   console.log('entrou: ', visibleModal);
+  // }
 
   return (
     <Container>
@@ -118,11 +110,11 @@ export default function Dashboard() {
           </div>
           <input
             placeholder="Buscar por encomendas"
-            onChange={e => filterOrder(e.target.value)}
+            onChange={(e) => filterOrder(e.target.value)}
           />
         </Search>
 
-        <button onClick={() => history.push('/orderform')} >
+        <button type="button" onClick={() => history.push('/orderform')}>
           <FaPlus color="#FFF" size={16} />
           Cadastrar
         </button>
@@ -142,23 +134,30 @@ export default function Dashboard() {
             </tr>
           </thead>
           <tbody>
-            {orders.map(order => (
+            {orders.map((order) => (
               <tr key={order.id}>
                 <td>#{order.id}</td>
                 <td>{order.recipient.name}</td>
 
                 <td>
                   <div>
-                    {order.deliveryman.avatar
-                      ? <img src={order.deliveryman.avatar.url} alt="Avatar" />
-                      : <Avatar
-                          name={order.deliveryman.name}
-                          maxInitials={2}
-                          size="32"
-                          round={true}
-                        />
-                    }
-                    {order.deliveryman.name}
+                    {order.deliveryman ? (
+                      <img src={order.deliveryman.avatar.url} alt="Avatar" />
+                    ) : (
+                      <Avatar
+                        name={
+                          order.deliveryman
+                            ? order.deliveryman.name
+                            : 'Sem entregador'
+                        }
+                        maxInitials={2}
+                        size="32"
+                        round
+                      />
+                    )}
+                    {order.deliveryman
+                      ? order.deliveryman.name
+                      : 'Sem entregador'}
                   </div>
                 </td>
 
@@ -174,40 +173,27 @@ export default function Dashboard() {
 
                 <td>
                   <Icon>
-                    <button onClick={() => ToggleVisibleMenu(order.id)}>
-                        <FaEllipsisH />
+                    <button
+                      type="button"
+                      onClick={() => ToggleVisibleMenu(order.id)}
+                    >
+                      <FaEllipsisH />
                     </button>
                   </Icon>
-                  {visibleMenu === order.id
-                    &&
-                    <ActionsMenu>
-                      <button>
-                        <FaEye size={12} color="#7159c1"/>
-                        Visualizar
-                      </button>
-
-                      <hr />
-
-                      <button>
-                        <FaPen size={12} color="#4D85EE"/>
-                        <Link
-                          to={{
-                            pathname: "/orderform",
-                            state: { order }
-                          }}
-                        > Editar </Link>
-                      </button>
-
-                      <hr />
-
-                      <button
-                        onClick={() => handleDelete(order.id)}
-                      >
-                        <FaTrash size={12} color="#DE3B3B"/>
-                        Excluir
-                      </button>
-                    </ActionsMenu>
-                  }
+                  <ActionsMenu>
+                    {visibleMenu && visibleMenuId === order.id ? (
+                      <ActionsToggleMenu
+                        data={order}
+                        view
+                        edit
+                        del
+                        editLink="orderform"
+                        delLink="orders"
+                      />
+                    ) : (
+                      ''
+                    )}
+                  </ActionsMenu>
                 </td>
               </tr>
             ))}
@@ -216,6 +202,7 @@ export default function Dashboard() {
 
         <PageNavigate>
           <button
+            type="button"
             disabled={page < 2}
             onClick={() => handlePage('back')}
           >
@@ -224,9 +211,7 @@ export default function Dashboard() {
 
           <span> Página {page} </span>
 
-          <button
-            onClick={() => handlePage('next')}
-          >
+          <button type="button" onClick={() => handlePage('next')}>
             <FaArrowRight />
           </button>
         </PageNavigate>
@@ -234,3 +219,37 @@ export default function Dashboard() {
     </Container>
   );
 }
+
+// {visibleMenu === order.id && (
+
+//   )}
+// <ActionsMenu>
+//   <button type="button" onClick={handleToggleModal}>
+//     <FaEye size={12} color="#7159c1" />
+//     Visualizar
+//   </button>
+
+//   <hr />
+
+//   <button type="button">
+//     <FaPen size={12} color="#4D85EE" />
+//     <Link
+//       to={{
+//         pathname: '/orderform',
+//         state: { order },
+//       }}
+//     >
+//       Editar
+//     </Link>
+//   </button>
+
+//   <hr />
+
+//   <button
+//     type="button"
+//     onClick={() => handleDelete(order.id)}
+//   >
+//     <FaTrash size={12} color="#DE3B3B" />
+//     Excluir
+//   </button>
+// </ActionsMenu>
