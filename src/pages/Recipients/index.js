@@ -1,7 +1,15 @@
-import React, {useState, useEffect} from 'react';
-import { FaSearch, FaPlus, FaEllipsisH, FaArrowLeft, FaArrowRight } from 'react-icons/fa'
+import React, { useState, useEffect } from 'react';
+import {
+  FaSearch,
+  FaPlus,
+  FaEllipsisH,
+  FaArrowLeft,
+  FaArrowRight,
+} from 'react-icons/fa';
 import api from '~/services/api';
 import history from '~/services/history';
+
+import ActionsToggleMenu from '~/components/ActionsToggleMenu';
 
 import {
   Container,
@@ -9,39 +17,55 @@ import {
   Actions,
   Search,
   Content,
+  Icon,
+  ActionsMenu,
   PageNavigate,
- } from './styles';
+} from './styles';
 
 export default function Recipients() {
   const [recipients, setRecipients] = useState([]);
   const [page, setPage] = useState(1);
+  const [visibleMenu, setVisibleMenu] = useState(false);
+  const [visibleMenuId, setVisibleMenuId] = useState(0);
 
   useEffect(() => {
-    async function loadRecipients(){
+    async function loadRecipients() {
       const response = await api.get('/recipients', {
         params: {
-          page
-        }
+          page,
+        },
       });
       setRecipients(response.data);
-      console.log(response.data);
     }
 
     loadRecipients();
-  }, [page]);
+  }, [recipients, page]);
 
   function handlePage(action) {
-    setPage( action === 'back' ? page - 1 : page + 1 );
+    setPage(action === 'back' ? page - 1 : page + 1);
   }
 
   async function filterRecipient(search) {
     const response = await api.get('/recipients', {
       params: {
         page,
-        findRecipient: search
-      }
+        findRecipient: search,
+      },
     });
     setRecipients(response.data);
+  }
+
+  function ToggleVisibleMenu(id) {
+    if (visibleMenu && visibleMenuId !== id) {
+      setVisibleMenuId(id);
+    }
+    if (visibleMenu && visibleMenuId === id) {
+      setVisibleMenu(false);
+      setVisibleMenuId(0);
+    } else {
+      setVisibleMenu(true);
+      setVisibleMenuId(id);
+    }
   }
 
   return (
@@ -57,11 +81,11 @@ export default function Recipients() {
           </div>
           <input
             placeholder="Buscar por destinatário"
-            onChange={e => filterRecipient(e.target.value)}
+            onChange={(e) => filterRecipient(e.target.value)}
           />
         </Search>
 
-        <button onClick={() => history.push('/recipientform')}>
+        <button type="button" onClick={() => history.push('/recipientform')}>
           <FaPlus color="#FFF" size={16} />
           Cadastrar
         </button>
@@ -78,17 +102,37 @@ export default function Recipients() {
             </tr>
           </thead>
           <tbody>
-            {recipients.map(recipient => (
+            {recipients.map((recipient) => (
               <tr key={recipient.id}>
                 <td>#{recipient.id}</td>
                 <td>{recipient.name}</td>
                 <td>
-                  {recipient.street},{" "}
-                  {recipient.street_number},{" "}
-                  {recipient.city} - {" "}
-                  {recipient.state}
+                  {recipient.street}, {recipient.street_number},{' '}
+                  {recipient.city} - {recipient.state}
                 </td>
-                <td><button><FaEllipsisH/></button></td>
+                <td>
+                  <Icon>
+                    <button
+                      type="button"
+                      onClick={() => ToggleVisibleMenu(recipient.id)}
+                    >
+                      <FaEllipsisH />
+                    </button>
+                  </Icon>
+                  <ActionsMenu>
+                    {visibleMenu && visibleMenuId === recipient.id ? (
+                      <ActionsToggleMenu
+                        data={recipient}
+                        edit
+                        del
+                        editLink="recipientform"
+                        delLink="recipients"
+                      />
+                    ) : (
+                      ''
+                    )}
+                  </ActionsMenu>
+                </td>
               </tr>
             ))}
           </tbody>
@@ -96,6 +140,7 @@ export default function Recipients() {
 
         <PageNavigate>
           <button
+            type="button"
             disabled={page < 2}
             onClick={() => handlePage('back')}
           >
@@ -104,9 +149,7 @@ export default function Recipients() {
 
           <span> Página {page} </span>
 
-          <button
-            onClick={() => handlePage('next')}
-          >
+          <button type="button" onClick={() => handlePage('next')}>
             <FaArrowRight />
           </button>
         </PageNavigate>

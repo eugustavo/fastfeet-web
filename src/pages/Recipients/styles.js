@@ -32,7 +32,7 @@ export const Actions = styled.div`
     align-items: center;
     transition: background 0.4s;
 
-    &:hover{
+    &:hover {
       background: ${darken(0.05, '#7159c1')};
     }
 
@@ -50,7 +50,7 @@ export const Search = styled.div`
 
   border-radius: 6px;
   border: 1px solid #ddd;
-  background: #FFF;
+  background: #fff;
 
   div {
     background: #fff;
@@ -64,7 +64,7 @@ export const Search = styled.div`
     border: 0;
     margin-left: 5px;
 
-    &::placeholder{
+    &::placeholder {
       font-size: 14px;
     }
   }
@@ -110,12 +110,25 @@ export const Content = styled.div`
       }
     }
 
-    th, td {
+    th,
+    td {
       padding: 15px;
       border-radius: 10px;
       text-align: left;
     }
   }
+`;
+
+export const Icon = styled.div`
+  display: none;
+  align-items: left;
+  justify-content: center;
+`;
+
+export const ActionsMenu = styled.div`
+  position: relative;
+  top: 38px;
+  left: 28px;
 `;
 
 export const PageNavigate = styled.div`

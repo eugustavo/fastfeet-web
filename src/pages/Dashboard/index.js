@@ -141,7 +141,7 @@ export default function Dashboard() {
 
                 <td>
                   <div>
-                    {order.deliveryman ? (
+                    {order.deliveryman.avatar ? (
                       <img src={order.deliveryman.avatar.url} alt="Avatar" />
                     ) : (
                       <Avatar

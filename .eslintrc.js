@@ -40,6 +40,7 @@ module.exports = {
     "no-param-reassign": "off",
     "no-underscore-dangle": "off",
     "no-nested-ternary": "off",
+    "no-shadow": "off",
     "react/jsx-props-no-spreading": "off",
     "jsx-a11y/label-has-associated-control": "off",
     camelcase: "off",
