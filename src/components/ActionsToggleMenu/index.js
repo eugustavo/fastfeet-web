@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import { FaEye, FaPen, FaTrash } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
@@ -7,6 +7,8 @@ import PropTypes from 'prop-types';
 import api from '~/services/api';
 
 import { ActionsMenu } from './styles';
+
+import InformationModal from '~/components/Modal';
 
 export default function ActionsToggleMenu({
   data,
@@ -17,28 +19,63 @@ export default function ActionsToggleMenu({
   delLink,
   cancel,
 }) {
+  const [toggleModal, setToggleModal] = useState(false);
+
   async function handleDelete(id) {
-    const confirm = window.confirm(
-      `Você realmente deseja excluir ${
-        data.name ? `${data.name}` : `a entrega de ${data.product}`
-      }`
-    );
+    if (delLink) {
+      const confirm = window.confirm(
+        `Você realmente deseja excluir ${
+          data.name ? `${data.name}` : `a entrega de ${data.product}`
+        }`
+      );
 
-    if (confirm) {
-      const response = await api.delete(`/${delLink}/${id}`);
+      try {
+        if (confirm) {
+          const response = await api.delete(`/${delLink}/${id}`);
 
-      if (response.status === 200) {
-        toast.success('Deletado com sucesso!');
-      } else {
+          if (response.status === 200) {
+            toast.success('Deletado com sucesso!');
+          } else {
+            toast.error('Não foi possível deletar');
+          }
+        }
+      } catch (err) {
+        console.tron.log(err);
         toast.error('Não foi possível deletar');
+      }
+    } else {
+      const confirm = window.confirm(
+        `Você realmente deseja cancelar a encomenda?`
+      );
+
+      try {
+        if (confirm) {
+          const response = await api.put(`/order/${id}/status`, {
+            canceled_at: new Date(),
+          });
+
+          if (response.status === 200) {
+            toast.success('Encomenda cancelada com sucesso!');
+          } else {
+            toast.error('Não foi possível cancelar a encomenda');
+          }
+        }
+      } catch (err) {
+        console.tron.log(err);
+        toast.error('Não foi possível cancelar a encomenda');
       }
     }
   }
+
+  function handleToggleModal() {
+    setToggleModal(!toggleModal);
+  }
+
   return (
     <ActionsMenu>
       {view ? (
         <>
-          <button type="button" onClick={() => {}}>
+          <button type="button" onClick={handleToggleModal}>
             <FaEye size={12} color="#7159c1" />
             Visualizar
           </button>
@@ -75,6 +112,17 @@ export default function ActionsToggleMenu({
       ) : (
         ''
       )}
+
+      {cancel ? (
+        <button type="button" onClick={() => handleDelete(data.delivery_id)}>
+          <FaTrash size={12} color="#DE3B3B" />
+          Cancelar
+        </button>
+      ) : (
+        ''
+      )}
+
+      {toggleModal ? <InformationModal open data={data} /> : ''}
     </ActionsMenu>
   );
 }
@@ -82,6 +130,7 @@ export default function ActionsToggleMenu({
 ActionsToggleMenu.propTypes = {
   data: PropTypes.shape({
     id: PropTypes.number,
+    delivery_id: PropTypes.number,
     product: PropTypes.string,
     name: PropTypes.string,
     start_date: PropTypes.string,

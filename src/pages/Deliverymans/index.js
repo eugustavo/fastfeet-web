@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import Avatar from 'react-avatar';
 import {
   FaSearch,
@@ -30,17 +30,21 @@ export default function Deliverymans() {
   const [visibleMenuId, setVisibleMenuId] = useState(0);
 
   useEffect(() => {
-    async function loadDeliverymans() {
-      const response = await api.get('/deliverymans', {
-        params: {
-          page,
-        },
-      });
-      setDeliverymans(response.data);
-    }
-
     loadDeliverymans();
-  }, [deliverymans, page]);
+  }, [page]);
+
+  useCallback(() => {
+    loadDeliverymans();
+  }, [deliverymans]);
+
+  async function loadDeliverymans() {
+    const response = await api.get('/deliverymans', {
+      params: {
+        page,
+      },
+    });
+    setDeliverymans(response.data);
+  }
 
   function handlePage(action) {
     setPage(action === 'back' ? page - 1 : page + 1);

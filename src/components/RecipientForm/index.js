@@ -1,4 +1,5 @@
 import React from 'react';
+import InputMask from 'react-input-mask';
 import { useLocation } from 'react-router-dom';
 import { Form, Input } from '@rocketseat/unform';
 import { FaChevronLeft, FaCheck } from 'react-icons/fa';
@@ -7,6 +8,8 @@ import { toast } from 'react-toastify';
 import history from '~/services/history';
 import api from '~/services/api';
 
+import InformationModal from '~/components/Modal';
+
 import { Container, Title, Actions, Content } from './styles';
 
 export default function RecipientForm() {
@@ -14,6 +17,7 @@ export default function RecipientForm() {
   const id = state ? state.data.id : null;
 
   async function handleSubmit(data) {
+    console.tron.log(data);
     const { name, street, complement, city, state, zipcode } = data;
     const street_number = Number(data.street_number);
 
@@ -35,7 +39,6 @@ export default function RecipientForm() {
         toast.error('Não foi possivel alterar os dados de destinatário');
       }
     } else {
-      console.tron.log('entrou');
       try {
         await api.post('recipients', {
           name,
@@ -120,12 +123,19 @@ export default function RecipientForm() {
 
             <div className="info_align_city">
               <label htmlFor="state"> Estado </label>
-              <Input name="state" placeholder="Nome do seu estado" />
+              <Input
+                name="state"
+                placeholder="Nome do seu estado"
+                className="inputState"
+                maxLength="2"
+              />
             </div>
 
             <div className="info_align_city">
               <label htmlFor="zipcode"> CEP </label>
-              <Input name="zipcode" placeholder="CEP da sua cidade" />
+              <InputMask mask="99999-999">
+                <Input name="zipcode" placeholder="CEP da sua cidade" />
+              </InputMask>
             </div>
           </div>
         </Form>

@@ -1,34 +1,52 @@
 import React, { useState, useEffect } from 'react';
-import { FaEllipsisH, FaArrowLeft, FaArrowRight } from 'react-icons/fa'
+import { FaEllipsisH, FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import api from '~/services/api';
 
 import {
   Container,
   Title,
   Content,
+  Icon,
+  ActionsMenu,
   PageNavigate,
- } from './styles';
+} from './styles';
+
+import ActionsToggleMenu from '~/components/ActionsToggleMenu';
 
 export default function DeliveryProblems() {
   const [problems, setProblems] = useState([]);
   const [page, setPage] = useState(1);
+  const [visibleMenu, setVisibleMenu] = useState(false);
+  const [visibleMenuId, setVisibleMenuId] = useState(0);
 
   useEffect(() => {
-    async function loadProblems(){
+    async function loadProblems() {
       const response = await api.get('/deliveryproblem', {
         params: {
-          page
-        }
+          page,
+        },
       });
       setProblems(response.data);
-      console.log(response.data);
     }
 
     loadProblems();
   }, [page]);
 
   function handlePage(action) {
-    setPage( action === 'back' ? page - 1 : page + 1 );
+    setPage(action === 'back' ? page - 1 : page + 1);
+  }
+
+  function ToggleVisibleMenu(id) {
+    if (visibleMenu && visibleMenuId !== id) {
+      setVisibleMenuId(id);
+    }
+    if (visibleMenu && visibleMenuId === id) {
+      setVisibleMenu(false);
+      setVisibleMenuId(0);
+    } else {
+      setVisibleMenu(true);
+      setVisibleMenuId(id);
+    }
   }
 
   return (
@@ -47,11 +65,29 @@ export default function DeliveryProblems() {
             </tr>
           </thead>
           <tbody>
-            {problems.map(problem => (
+            {problems.map((problem) => (
               <tr key={problem.id}>
                 <td>#{problem.id}</td>
                 <td>{problem.description}</td>
-                <td><button><FaEllipsisH/></button></td>
+                <td>
+                  <button type="button">
+                    <Icon>
+                      <button
+                        type="button"
+                        onClick={() => ToggleVisibleMenu(problem.id)}
+                      >
+                        <FaEllipsisH />
+                      </button>
+                    </Icon>
+                    <ActionsMenu>
+                      {visibleMenu && visibleMenuId === problem.id ? (
+                        <ActionsToggleMenu data={problem} view cancel />
+                      ) : (
+                        ''
+                      )}
+                    </ActionsMenu>
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
@@ -59,6 +95,7 @@ export default function DeliveryProblems() {
 
         <PageNavigate>
           <button
+            type="button"
             disabled={page < 2}
             onClick={() => handlePage('back')}
           >
@@ -67,9 +104,7 @@ export default function DeliveryProblems() {
 
           <span> Página {page} </span>
 
-          <button
-            onClick={() => handlePage('next')}
-          >
+          <button type="button" onClick={() => handlePage('next')}>
             <FaArrowRight />
           </button>
         </PageNavigate>

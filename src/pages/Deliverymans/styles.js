@@ -128,7 +128,7 @@ export const Icon = styled.div`
 export const ActionsMenu = styled.div`
   position: relative;
   top: 38px;
-  left: 20px;
+  left: 23px;
 `;
 
 export const PageNavigate = styled.div`

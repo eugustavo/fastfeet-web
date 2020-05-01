@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { parseISO, format } from 'date-fns';
+import PropTypes from 'prop-types';
+import ReactDOM from 'react-dom';
 import Modal from 'react-modal';
 
-// import { Container } from './styles';
+import { Content } from './styles';
 
 const customStyles = {
   content: {
@@ -12,50 +15,134 @@ const customStyles = {
     marginRight: '-50%',
     transform: 'translate(-50%, -50%)',
   },
+  overlay: {
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+  },
 };
 
-export default function InformationModal({ open }) {
-  console.log('MODAL:', open);
-  let subtitle;
-  const [modalIsOpen, setIsOpen] = useState(false);
+Modal.setAppElement(document.getElementById('root'));
 
-  function openModal() {
-    setIsOpen(true);
+export default function InformationModal({ open, data }) {
+  const [toggleModal, setToggleModal] = useState(false);
+  const [recipient, setRecipient] = useState([]);
+  const [date, setDate] = useState([]);
+  console.tron.log(data);
+
+  useEffect(() => {
+    if (open) {
+      setToggleModal(open);
+    }
+    setRecipient(data.recipient);
+    formattedDate();
+  }, []);
+
+  function formattedDate() {
+    let formattedStart;
+    let formattedEnd;
+
+    if (data.start_date)
+      formattedStart = format(parseISO(data.start_date), 'dd/MM/yyyy');
+
+    if (data.end_date)
+      formattedEnd = format(parseISO(data.end_date), 'dd/MM/yyyy');
+
+    setDate({ formattedStart, formattedEnd });
   }
 
-  function afterOpenModal() {
-    subtitle.style.color = '#f00';
-  }
-
-  function closeModal() {
-    setIsOpen(false);
+  function ToggleModal() {
+    setToggleModal(!toggleModal);
   }
 
   return (
     <div>
-      <button type="button" onClick={openModal}>
-        Open Modal
-      </button>
       <Modal
-        isOpen={modalIsOpen}
-        onAfterOpen={afterOpenModal}
-        onRequestClose={closeModal}
+        isOpen={toggleModal}
+        onRequestClose={ToggleModal}
         style={customStyles}
-        contentLabel="Example Modal"
       >
-        <h2>Hello</h2>
-        <button type="button" onClick={closeModal}>
-          close
-        </button>
-        <div>I am a modal</div>
-        <form>
-          <input />
-          <button type="button">tab navigation</button>
-          <button type="button">stays</button>
-          <button type="button">inside</button>
-          <button type="button">the modal</button>
-        </form>
+        <Content>
+          {data.description ? (
+            <>
+              <strong>Visualizar problema</strong>
+              <div className="problem">
+                <span>{data.description}</span>
+              </div>
+            </>
+          ) : (
+            <>
+              <strong>Informações da encomenda</strong>
+              <div className="order">
+                <span>
+                  {recipient.street}, {recipient.street_number}
+                </span>
+                <span>
+                  {recipient.city} - {recipient.state}
+                </span>
+                <span>{recipient.zipcode}</span>
+              </div>
+
+              <strong>Datas</strong>
+              <div className="date">
+                <strong>
+                  {' '}
+                  Retirada:{' '}
+                  <span>
+                    {data.start_date
+                      ? date.formattedStart
+                      : 'Ainda não foi retirada'}
+                  </span>{' '}
+                </strong>
+
+                <strong>
+                  {' '}
+                  Entrega:{' '}
+                  <span>
+                    {data.end_date
+                      ? date.formattedEnd
+                      : date.formattedStart
+                      ? 'Em rota'
+                      : 'Ainda não foi retirada'}
+                  </span>{' '}
+                </strong>
+              </div>
+
+              <strong>Assinatura do destinatário</strong>
+              <div className="signature">
+                {data.signature ? (
+                  <img src={data.signature.url} alt="Signature" />
+                ) : (
+                  ''
+                )}
+              </div>
+            </>
+          )}
+        </Content>
       </Modal>
     </div>
   );
 }
+
+InformationModal.propTypes = {
+  open: PropTypes.bool.isRequired,
+  data: PropTypes.shape({
+    id: PropTypes.number,
+    start_date: PropTypes.string,
+    end_date: PropTypes.string,
+    product: PropTypes.string,
+    description: PropTypes.string,
+    signature: PropTypes.string,
+    recipient: PropTypes.shape({
+      street: PropTypes.string,
+      street_number: PropTypes.number,
+      city: PropTypes.string,
+      state: PropTypes.string,
+      zipcode: PropTypes.string,
+    }),
+  }),
+};
+
+InformationModal.defaultProps = {
+  data: [],
+};
+
+ReactDOM.render(<InformationModal />, document.getElementById('root'));

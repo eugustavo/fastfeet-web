@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   FaSearch,
   FaPlus,
@@ -29,17 +29,21 @@ export default function Recipients() {
   const [visibleMenuId, setVisibleMenuId] = useState(0);
 
   useEffect(() => {
-    async function loadRecipients() {
-      const response = await api.get('/recipients', {
-        params: {
-          page,
-        },
-      });
-      setRecipients(response.data);
-    }
-
     loadRecipients();
-  }, [recipients, page]);
+  }, [page]);
+
+  useCallback(() => {
+    loadRecipients();
+  }, [recipients]);
+
+  async function loadRecipients() {
+    const response = await api.get('/recipients', {
+      params: {
+        page,
+      },
+    });
+    setRecipients(response.data);
+  }
 
   function handlePage(action) {
     setPage(action === 'back' ? page - 1 : page + 1);

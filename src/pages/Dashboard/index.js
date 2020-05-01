@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Avatar from 'react-avatar';
 import {
   FaSearch,
@@ -23,36 +23,41 @@ import {
 } from './styles';
 
 import ActionsToggleMenu from '~/components/ActionsToggleMenu';
+import InformationModal from '~/components/Modal';
 
 export default function Dashboard() {
   const [orders, setOrders] = useState([]);
   const [page, setPage] = useState(1);
   const [visibleMenu, setVisibleMenu] = useState(false);
   const [visibleMenuId, setVisibleMenuId] = useState(0);
-  // const [visibleModal, setVisibleModal] = useState(false);
 
   useEffect(() => {
-    async function loadOrders() {
-      const response = await api.get('/orders', {
-        params: {
-          page,
-        },
-      });
-
-      const data = response.data.map((order) => ({
-        ...order,
-        status: order.canceled_at
-          ? 'CANCELADA'
-          : order.start_date && order.end_date
-          ? 'ENTREGUE'
-          : order.start_date
-          ? 'RETIRADA'
-          : 'PENDENTE',
-      }));
-      setOrders(data);
-    }
     loadOrders();
-  }, [orders, page]);
+  }, [page]);
+
+  useCallback(() => {
+    loadOrders();
+  }, [orders]);
+
+  async function loadOrders() {
+    const response = await api.get('/orders', {
+      params: {
+        page,
+      },
+    });
+
+    const data = response.data.map((order) => ({
+      ...order,
+      status: order.canceled_at
+        ? 'CANCELADA'
+        : order.start_date && order.end_date
+        ? 'ENTREGUE'
+        : order.start_date
+        ? 'RETIRADA'
+        : 'PENDENTE',
+    }));
+    setOrders(data);
+  }
 
   function handlePage(action) {
     setPage(action === 'back' ? page - 1 : page + 1);
@@ -91,11 +96,6 @@ export default function Dashboard() {
       setVisibleMenuId(id);
     }
   }
-
-  // function handleToggleModal() {
-  //   setVisibleModal(!visibleModal);
-  //   console.log('entrou: ', visibleModal);
-  // }
 
   return (
     <Container>
@@ -141,8 +141,17 @@ export default function Dashboard() {
 
                 <td>
                   <div>
-                    {order.deliveryman.avatar ? (
-                      <img src={order.deliveryman.avatar.url} alt="Avatar" />
+                    {order.deliveryman ? (
+                      order.deliveryman.avatar ? (
+                        <img src={order.deliveryman.avatar.url} alt="Avatar" />
+                      ) : (
+                        <Avatar
+                          name={order.deliveryman.name}
+                          maxInitials={2}
+                          size="32"
+                          round
+                        />
+                      )
                     ) : (
                       <Avatar
                         name={

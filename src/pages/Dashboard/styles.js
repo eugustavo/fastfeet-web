@@ -221,5 +221,5 @@ export const Icon = styled.div`
 export const ActionsMenu = styled.div`
   position: relative;
   top: 53px;
-  left: 37px;
+  left: 39px;
 `;

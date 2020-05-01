@@ -80,7 +80,7 @@ export const Content = styled.div`
     flex-direction: column;
     justify-content: center;
     width: 100%;
-    padding: 10px 0 10px 10px;
+    padding: 10px 0 0 10px;
 
     input {
       height: 45px;
@@ -118,6 +118,14 @@ export const Content = styled.div`
       display: flex;
       flex-direction: column;
       width: 100%;
+
+      input.inputState {
+        text-transform: uppercase;
+
+        &::placeholder {
+          text-transform: initial;
+        }
+      }
     }
   }
 `;

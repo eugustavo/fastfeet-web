@@ -52,12 +52,25 @@ export const Content = styled.div`
       }
     }
 
-    th, td {
+    th,
+    td {
       padding: 15px;
       border-radius: 10px;
       text-align: left;
     }
   }
+`;
+
+export const Icon = styled.div`
+  display: none;
+  align-items: left;
+  justify-content: center;
+`;
+
+export const ActionsMenu = styled.div`
+  position: relative;
+  top: 38px;
+  left: 71px;
 `;
 
 export const PageNavigate = styled.div`
