@@ -8,8 +8,6 @@ import { toast } from 'react-toastify';
 import history from '~/services/history';
 import api from '~/services/api';
 
-import InformationModal from '~/components/Modal';
-
 import { Container, Title, Actions, Content } from './styles';
 
 export default function RecipientForm() {

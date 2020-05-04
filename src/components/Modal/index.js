@@ -34,6 +34,7 @@ export default function InformationModal({ open, data }) {
     }
     setRecipient(data.recipient);
     formattedDate();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function formattedDate() {

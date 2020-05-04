@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import * as Yup from 'yup';
+// import * as Yup from 'yup';
 import { useLocation } from 'react-router-dom';
 import { FaChevronLeft, FaCheck } from 'react-icons/fa';
 
 import { Form, Input } from '@rocketseat/unform';
-import AsyncSelect from 'react-select/async';
 
 import history from '~/services/history';
 import api from '~/services/api';
 
+import SelectInput from '~/components/SelectInput';
+
 import { Container, Title, Actions, Content } from './styles';
 
 export default function OrderForm() {
-  const [deliverymans, setDeliverymans] = useState([]);
-  const [recipients, setRecipients] = useState([]);
-
   const { state } = useLocation();
-  console.log(state);
+
+  const [deliverymans, setDeliverymans] = useState([]);
+  // const [recipients, setRecipients] = useState([]);
 
   useEffect(() => {
     async function loadDeliverymans() {
@@ -31,8 +31,8 @@ export default function OrderForm() {
     loadDeliverymans();
   }, []);
 
-  async function handleSubmit() {
-    console.log(deliverymans);
+  async function handleSubmit(data) {
+    console.tron.log(data);
   }
 
   return (
@@ -54,7 +54,7 @@ export default function OrderForm() {
             VOLTAR
           </button>
 
-          <button type="button" className="save" onClick={handleSubmit}>
+          <button type="submit" form="form-order" className="save">
             <FaCheck color="#FFF" size={16} />
             SALVAR
           </button>
@@ -62,26 +62,24 @@ export default function OrderForm() {
       </header>
 
       <Content>
-        <Form initialData={state ? state.data : ''}>
+        <Form
+          id="form-order"
+          initialData={state ? state.data : ''}
+          onSubmit={handleSubmit}
+        >
           <div className="contentInputs">
             <div className="selectInput">
               <label htmlFor="recipient"> Destinatário </label>
-              <AsyncSelect
-                defaultInputValue="Selecione uma opção"
-                loadOptions={() => {}}
-              />
+              <SelectInput name="deliveryman_id" options={deliverymans} />
             </div>
             <div className="selectInput">
               <label htmlFor="deliveyman"> Entregador </label>
-              <AsyncSelect
-                defaultInputValue="Selecione uma opção"
-                loadOptions={() => {}}
-              />
+              <SelectInput name="recipient_id" options={deliverymans} />
             </div>
           </div>
 
           <div className="inputProduct">
-            <label htmlFor="deliveyman"> Nome do Produto </label>
+            <label htmlFor="product"> Nome do Produto </label>
             <Input
               name="product"
               className="product"

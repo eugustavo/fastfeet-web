@@ -31,10 +31,12 @@ export default function Deliverymans() {
 
   useEffect(() => {
     loadDeliverymans();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
   useCallback(() => {
     loadDeliverymans();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deliverymans]);
 
   async function loadDeliverymans() {

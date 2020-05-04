@@ -23,7 +23,6 @@ import {
 } from './styles';
 
 import ActionsToggleMenu from '~/components/ActionsToggleMenu';
-import InformationModal from '~/components/Modal';
 
 export default function Dashboard() {
   const [orders, setOrders] = useState([]);
@@ -33,11 +32,12 @@ export default function Dashboard() {
 
   useEffect(() => {
     loadOrders();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
-
   useCallback(() => {
     loadOrders();
-  }, [orders]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page]);
 
   async function loadOrders() {
     const response = await api.get('/orders', {

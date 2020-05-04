@@ -30,10 +30,12 @@ export default function Recipients() {
 
   useEffect(() => {
     loadRecipients();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
   useCallback(() => {
     loadRecipients();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [recipients]);
 
   async function loadRecipients() {
