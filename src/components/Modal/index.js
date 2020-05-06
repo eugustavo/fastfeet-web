@@ -73,13 +73,19 @@ export default function InformationModal({ open, data }) {
             <>
               <strong>Informações da encomenda</strong>
               <div className="order">
-                <span>
-                  {recipient.street}, {recipient.street_number}
-                </span>
-                <span>
-                  {recipient.city} - {recipient.state}
-                </span>
-                <span>{recipient.zipcode}</span>
+                {recipient ? (
+                  <>
+                    <span>
+                      {recipient.street}, {recipient.street_number}
+                    </span>
+                    <span>
+                      {recipient.city} - {recipient.state}
+                    </span>
+                    <span>{recipient.zipcode}</span>
+                  </>
+                ) : (
+                  <span>Sem destinatário</span>
+                )}
               </div>
 
               <strong>Datas</strong>

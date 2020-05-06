@@ -137,7 +137,9 @@ export default function Dashboard() {
             {orders.map((order) => (
               <tr key={order.id}>
                 <td>#{order.id}</td>
-                <td>{order.recipient.name}</td>
+                <td>
+                  {order.recipient ? order.recipient.name : 'Sem destinatário'}
+                </td>
 
                 <td>
                   <div>
@@ -170,8 +172,8 @@ export default function Dashboard() {
                   </div>
                 </td>
 
-                <td>{order.recipient.city}</td>
-                <td>{order.recipient.state}</td>
+                <td>{order.recipient ? order.recipient.city : '---'}</td>
+                <td>{order.recipient ? order.recipient.state : '---'}</td>
 
                 <td>
                   <Status status={order.status}>

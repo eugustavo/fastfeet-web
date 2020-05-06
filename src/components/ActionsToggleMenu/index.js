@@ -20,6 +20,7 @@ export default function ActionsToggleMenu({
   cancel,
 }) {
   const [toggleModal, setToggleModal] = useState(false);
+  console.tron.log(`/${delLink}/${data.id}`);
 
   async function handleDelete(id) {
     if (delLink) {
@@ -31,6 +32,7 @@ export default function ActionsToggleMenu({
 
       try {
         if (confirm) {
+          console.tron.log(`/${delLink}/${id}`);
           const response = await api.delete(`/${delLink}/${id}`);
 
           if (response.status === 200) {
