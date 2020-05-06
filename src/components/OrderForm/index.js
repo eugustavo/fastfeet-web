@@ -2,13 +2,12 @@ import React, { useEffect, useState } from 'react';
 // import * as Yup from 'yup';
 import { useLocation } from 'react-router-dom';
 import { FaChevronLeft, FaCheck } from 'react-icons/fa';
-
-import { Form, Input } from '@rocketseat/unform';
+import { Input, Form } from '@rocketseat/unform';
+import { toast } from 'react-toastify';
 
 import history from '~/services/history';
 import api from '~/services/api';
-
-import SelectInput from '~/components/SelectInput';
+import SelectInput from './SelectInput';
 
 import { Container, Title, Actions, Content } from './styles';
 
@@ -16,23 +15,93 @@ export default function OrderForm() {
   const { state } = useLocation();
 
   const [deliverymans, setDeliverymans] = useState([]);
-  // const [recipients, setRecipients] = useState([]);
+  const [recipients, setRecipients] = useState([]);
+
+  async function loadDeliverymans() {
+    const response = await api.get('deliverymans', {
+      params: {
+        page: 1,
+      },
+    });
+
+    const { data } = response;
+
+    if (data) {
+      return setDeliverymans(
+        data.map((deliveryman) => ({
+          value: deliveryman.id,
+          label: deliveryman.name,
+        }))
+      );
+    }
+    return setDeliverymans(data);
+  }
+  async function loadRecipients() {
+    const response = await api.get('recipients', {
+      params: {
+        page: 1,
+      },
+    });
+
+    const { data } = response;
+
+    if (data) {
+      return setRecipients(
+        data.map((recipient) => ({
+          value: recipient.id,
+          label: recipient.name,
+        }))
+      );
+    }
+    return setRecipients(data);
+  }
 
   useEffect(() => {
-    async function loadDeliverymans() {
-      const response = await api.get('/deliverymans', {
-        params: {
-          page: 1,
-        },
-      });
-      setDeliverymans(response.data);
-    }
-
     loadDeliverymans();
+    loadRecipients();
   }, []);
 
   async function handleSubmit(data) {
-    console.tron.log(data);
+    if (state) {
+      console.tron.log(data);
+      console.tron.log(state.data);
+      const { id } = state.data;
+      const { deliveryman, recipient, product } = data;
+      try {
+        const response = await api.put(`/edit-order/${id}`, {
+          deliveryman_id: deliveryman.value,
+          recipient_id: recipient.value,
+          product,
+        });
+
+        if (response.status === 200) {
+          toast.success('Encomenda alterada com sucesso');
+        } else {
+          toast.error(response.error);
+        }
+      } catch (err) {
+        console.tron.log(err);
+        toast.error('Não foi possível alterar sua encomenda');
+      }
+    } else {
+      const { deliveryman, recipient, product } = data;
+      try {
+        const response = await api.post('orders', {
+          deliveryman_id: deliveryman.value,
+          recipient_id: recipient.value,
+          product,
+        });
+
+        if (response.status === 200) {
+          toast.success('Encomenda cadastrada com sucesso');
+        } else {
+          toast.error('Não foi possível cadastrar a encomenda');
+        }
+      } catch (err) {
+        console.tron.log(err);
+        toast.error('Não foi possível cadastrar a encomenda');
+      }
+    }
   }
 
   return (
@@ -69,12 +138,20 @@ export default function OrderForm() {
         >
           <div className="contentInputs">
             <div className="selectInput">
-              <label htmlFor="recipient"> Destinatário </label>
-              <SelectInput name="deliveryman_id" options={deliverymans} />
+              <SelectInput
+                name="recipient"
+                label="Destinatário"
+                placeholder="Selecione um destinatário"
+                options={recipients}
+              />
             </div>
             <div className="selectInput">
-              <label htmlFor="deliveyman"> Entregador </label>
-              <SelectInput name="recipient_id" options={deliverymans} />
+              <SelectInput
+                name="deliveryman"
+                label="Entregador"
+                placeholder="Selecione um entregador"
+                options={deliverymans}
+              />
             </div>
           </div>
 
