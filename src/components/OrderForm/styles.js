@@ -17,6 +17,10 @@ export const Container = styled.div`
     width: 405px;
     height: 45px;
     margin-top: 5px;
+
+    div.css-1wa3eu0-placeholder {
+      font-weight: normal;
+    }
   }
 `;
 

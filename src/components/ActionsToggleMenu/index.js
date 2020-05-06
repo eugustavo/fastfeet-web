@@ -50,9 +50,7 @@ export default function ActionsToggleMenu({
 
       try {
         if (confirm) {
-          const response = await api.put(`/order/${id}/status`, {
-            canceled_at: new Date(),
-          });
+          const response = await api.delete(`/problem/${id}/cancel-delivery`);
 
           if (response.status === 200) {
             toast.success('Encomenda cancelada com sucesso!');
@@ -114,7 +112,7 @@ export default function ActionsToggleMenu({
       )}
 
       {cancel ? (
-        <button type="button" onClick={() => handleDelete(data.delivery_id)}>
+        <button type="button" onClick={() => handleDelete(data.id)}>
           <FaTrash size={12} color="#DE3B3B" />
           Cancelar
         </button>
