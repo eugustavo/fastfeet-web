@@ -145,7 +145,13 @@ export default function Dashboard() {
                   <div>
                     {order.deliveryman ? (
                       order.deliveryman.avatar ? (
-                        <img src={order.deliveryman.avatar.url} alt="Avatar" />
+                        <Avatar
+                          name={order.deliveryman.name}
+                          src={order.deliveryman.avatar.url}
+                          maxInitials={2}
+                          size="32"
+                          round
+                        />
                       ) : (
                         <Avatar
                           name={order.deliveryman.name}
@@ -166,9 +172,11 @@ export default function Dashboard() {
                         round
                       />
                     )}
-                    {order.deliveryman
-                      ? order.deliveryman.name
-                      : 'Sem entregador'}
+                    <h4>
+                      {order.deliveryman
+                        ? order.deliveryman.name
+                        : 'Sem entregador'}
+                    </h4>
                   </div>
                 </td>
 
@@ -197,8 +205,8 @@ export default function Dashboard() {
                         data={order}
                         view
                         edit
-                        del
                         editLink="orderform"
+                        del
                         delLink="orders"
                       />
                     ) : (
@@ -230,37 +238,3 @@ export default function Dashboard() {
     </Container>
   );
 }
-
-// {visibleMenu === order.id && (
-
-//   )}
-// <ActionsMenu>
-//   <button type="button" onClick={handleToggleModal}>
-//     <FaEye size={12} color="#7159c1" />
-//     Visualizar
-//   </button>
-
-//   <hr />
-
-//   <button type="button">
-//     <FaPen size={12} color="#4D85EE" />
-//     <Link
-//       to={{
-//         pathname: '/orderform',
-//         state: { order },
-//       }}
-//     >
-//       Editar
-//     </Link>
-//   </button>
-
-//   <hr />
-
-//   <button
-//     type="button"
-//     onClick={() => handleDelete(order.id)}
-//   >
-//     <FaTrash size={12} color="#DE3B3B" />
-//     Excluir
-//   </button>
-// </ActionsMenu>

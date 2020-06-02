@@ -4,19 +4,16 @@ import ReactSelect from 'react-select';
 
 import { useField } from '@rocketseat/unform';
 
-export default function SelectInput({ name, label, placeholder, ...rest }) {
+export default function SelectInput({
+  name,
+  label,
+  placeholder,
+  EditActive,
+  ...rest
+}) {
+  console.tron.log('EDIT', EditActive);
   const selectRef = useRef(null);
-  const { fieldName, defaultValue, registerField } = useField(name);
-
-  // const [valueWithEdit, setValueWithEdit] = useState([]);
-  // eslint-disable-next-line consistent-return
-  // function loadOptions() {
-  //   if (value) {
-  //     const { id } = value;
-  //     const { name } = value;
-  //     return setValueWithEdit({ value: id, label: name });
-  //   }
-  // }
+  const { fieldName, registerField } = useField(name);
 
   useEffect(() => {
     registerField({
@@ -42,10 +39,9 @@ export default function SelectInput({ name, label, placeholder, ...rest }) {
     <label htmlFor={fieldName}>
       {label}
       <ReactSelect
-        defaultValue={defaultValue}
         ref={selectRef}
         classNamePrefix="react-select"
-        placeholder={placeholder}
+        placeholder={EditActive || placeholder}
         {...rest}
       />
     </label>
@@ -57,13 +53,9 @@ SelectInput.propTypes = {
   options: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
   label: PropTypes.string.isRequired,
   placeholder: PropTypes.string.isRequired,
-
-  // value: PropTypes.shape({
-  //   id: PropTypes.number,
-  //   name: PropTypes.string,
-  // }),
+  EditActive: PropTypes.string,
 };
 
-// SelectInput.defaultProps = {
-//   value: [],
-// };
+SelectInput.defaultProps = {
+  EditActive: '',
+};

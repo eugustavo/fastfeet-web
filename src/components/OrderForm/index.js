@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-// import * as Yup from 'yup';
 import { useLocation } from 'react-router-dom';
 import { FaChevronLeft, FaCheck } from 'react-icons/fa';
 import { Input, Form } from '@rocketseat/unform';
@@ -143,6 +142,7 @@ export default function OrderForm() {
                 label="Destinatário"
                 placeholder="Selecione um destinatário"
                 options={recipients}
+                EditActive={state ? state.data.recipient.name : ''}
               />
             </div>
             <div className="selectInput">
@@ -151,6 +151,7 @@ export default function OrderForm() {
                 label="Entregador"
                 placeholder="Selecione um entregador"
                 options={deliverymans}
+                EditActive={state ? state.data.deliveryman.name : ''}
               />
             </div>
           </div>

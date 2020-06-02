@@ -97,15 +97,9 @@ export const Content = styled.div`
         display: flex;
         align-items: center;
 
-        img {
-          width: 32px;
-          height: 32px;
-          border-radius: 50%;
-          margin-right: 5px;
-        }
-
-        div.sb-avatar.sb-avatar--text {
-          margin-right: 5px;
+        h4 {
+          font-weight: normal;
+          margin-left: 5px;
         }
       }
     }
@@ -115,6 +109,7 @@ export const Content = styled.div`
       padding: 10px;
       border-radius: 10px;
       text-align: left;
+      font-size: 14px;
     }
   }
 `;

@@ -6,8 +6,7 @@ import * as Yup from 'yup';
 import { signInRequest } from '~/store/module/auth/actions';
 
 import logo from '~/assets/logo.svg';
-import deliveryAnimation from '~/assets/animation/delivery.gif';
-import { Container, Content, Loading } from './styles';
+import { Container, Content } from './styles';
 
 const schema = Yup.object().shape({
   email: Yup.string()
@@ -27,35 +26,19 @@ export default function SignIn() {
   return (
     <Container>
       <Content>
-        {loading ? (
-          <Loading>
-            <img src={deliveryAnimation} alt="Delivery Animation" />
-          </Loading>
-        ) : (
-          <>
-            <img src={logo} alt="Logo Fastfeet" />
+        <img src={logo} alt="Logo Fastfeet" />
 
-            <Form schema={schema} onSubmit={handleSubmit}>
-              <label htmlFor="email">SEU E-MAIL</label>
-              <Input
-                name="email"
-                type="email"
-                placeholder="exemplo@email.com"
-              />
+        <Form schema={schema} onSubmit={handleSubmit}>
+          <label htmlFor="email">SEU E-MAIL</label>
+          <Input name="email" type="email" placeholder="exemplo@email.com" />
 
-              <label htmlFor="password">SUA SENHA</label>
-              <Input
-                name="password"
-                type="password"
-                placeholder="*************"
-              />
+          <label htmlFor="password">SUA SENHA</label>
+          <Input name="password" type="password" placeholder="*************" />
 
-              <button type="submit">
-                {loading ? 'Carregando...' : 'ENTRAR NO SISTEMA'}
-              </button>
-            </Form>
-          </>
-        )}
+          <button type="submit">
+            {loading ? 'Carregando...' : 'ENTRAR NO SISTEMA'}
+          </button>
+        </Form>
       </Content>
     </Container>
   );
