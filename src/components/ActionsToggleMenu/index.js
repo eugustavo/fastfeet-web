@@ -1,3 +1,4 @@
+/* eslint-disable no-alert */
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import { FaEye, FaPen, FaTrash } from 'react-icons/fa';
