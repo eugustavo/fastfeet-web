@@ -15,7 +15,7 @@ export default function DeliverymanForm() {
   const { state } = useLocation();
   console.tron.log(state);
 
-  async function handleSubmit(data) {
+  async function handleSubmit(data, { resetForm }) {
     const avatar_id = state
       ? state.data.avatar
         ? state.data.avatar.id
@@ -47,6 +47,7 @@ export default function DeliverymanForm() {
         );
       }
     }
+    resetForm();
   }
 
   return (

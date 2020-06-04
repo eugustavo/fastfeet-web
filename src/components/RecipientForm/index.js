@@ -14,13 +14,12 @@ export default function RecipientForm() {
   const { state } = useLocation();
   const id = state ? state.data.id : null;
 
-  async function handleSubmit(data) {
+  async function handleSubmit(data, { resetForm }) {
     console.tron.log(data);
     const { name, street, complement, city, state, zipcode } = data;
     const street_number = Number(data.street_number);
 
     if (id) {
-      console.tron.log('entrou no state');
       try {
         await api.put(`recipients/${id}`, {
           name,
@@ -55,6 +54,7 @@ export default function RecipientForm() {
         );
       }
     }
+    resetForm();
   }
 
   return (

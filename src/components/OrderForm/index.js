@@ -60,7 +60,7 @@ export default function OrderForm() {
     loadRecipients();
   }, []);
 
-  async function handleSubmit(data) {
+  async function handleSubmit(data, { resetForm }) {
     if (state) {
       console.tron.log(data);
       console.tron.log(state.data);
@@ -101,6 +101,7 @@ export default function OrderForm() {
         toast.error('Não foi possível cadastrar a encomenda');
       }
     }
+    resetForm();
   }
 
   return (
