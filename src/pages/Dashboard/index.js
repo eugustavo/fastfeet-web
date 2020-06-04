@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useCallback } from 'react';
 import Avatar from 'react-avatar';
 import {
@@ -32,11 +33,9 @@ export default function Dashboard() {
 
   useEffect(() => {
     loadOrders();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
   useCallback(() => {
     loadOrders();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
   async function loadOrders() {

@@ -21,7 +21,6 @@ export default function ActionsToggleMenu({
   cancel,
 }) {
   const [toggleModal, setToggleModal] = useState(false);
-  console.tron.log(`/${delLink}/${data.id}`);
 
   async function handleDelete(id) {
     if (delLink) {

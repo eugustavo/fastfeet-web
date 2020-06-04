@@ -62,14 +62,26 @@ export default function OrderForm() {
 
   async function handleSubmit(data, { resetForm }) {
     if (state) {
-      console.tron.log(data);
-      console.tron.log(state.data);
+      let recipient;
+      let deliveryman;
       const { id } = state.data;
-      const { deliveryman, recipient, product } = data;
+      const { product } = data;
+
+      if (data.recipient) {
+        recipient = data.recipient.value;
+      } else {
+        recipient = state.date.recipient.id;
+      }
+      if (data.deliveryman) {
+        deliveryman = data.deliveryman.value;
+      } else {
+        deliveryman = state.data.deliveryman.id;
+      }
+
       try {
         const response = await api.put(`/edit-order/${id}`, {
-          deliveryman_id: deliveryman.value,
-          recipient_id: recipient.value,
+          deliveryman_id: deliveryman,
+          recipient_id: recipient,
           product,
         });
 

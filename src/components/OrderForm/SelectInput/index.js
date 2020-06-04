@@ -11,7 +11,6 @@ export default function SelectInput({
   EditActive,
   ...rest
 }) {
-  console.tron.log('EDIT', EditActive);
   const selectRef = useRef(null);
   const { fieldName, registerField } = useField(name);
 

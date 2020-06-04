@@ -15,13 +15,12 @@ export default function DeliverymanForm() {
   const { state } = useLocation();
   console.tron.log(state);
 
-  async function handleSubmit(data, { resetForm }) {
+  async function handleSubmit(data) {
     const avatar_id = state
       ? state.data.avatar
         ? state.data.avatar.id
         : Number(data.avatar_id)
       : Number(data.avatar_id);
-    console.tron.log('AVATAR_ID', avatar_id);
 
     if (state) {
       const { id } = state.data;
@@ -47,7 +46,6 @@ export default function DeliverymanForm() {
         );
       }
     }
-    resetForm();
   }
 
   return (
