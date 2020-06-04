@@ -70,7 +70,7 @@ export default function OrderForm() {
       if (data.recipient) {
         recipient = data.recipient.value;
       } else {
-        recipient = state.date.recipient.id;
+        recipient = state.data.recipient.id;
       }
       if (data.deliveryman) {
         deliveryman = data.deliveryman.value;
@@ -155,7 +155,9 @@ export default function OrderForm() {
                 label="Destinatário"
                 placeholder="Selecione um destinatário"
                 options={recipients}
-                EditActive={state ? state.data.recipient.name : ''}
+                EditActive={
+                  state.data.recipient ? state.data.recipient.name : ''
+                }
               />
             </div>
             <div className="selectInput">
@@ -164,7 +166,9 @@ export default function OrderForm() {
                 label="Entregador"
                 placeholder="Selecione um entregador"
                 options={deliverymans}
-                EditActive={state ? state.data.deliveryman.name : ''}
+                EditActive={
+                  state.data.deliveryman ? state.data.deliveryman.name : ''
+                }
               />
             </div>
           </div>
