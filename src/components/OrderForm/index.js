@@ -3,12 +3,19 @@ import { useLocation } from 'react-router-dom';
 import { FaChevronLeft, FaCheck } from 'react-icons/fa';
 import { Input, Form } from '@rocketseat/unform';
 import { toast } from 'react-toastify';
+import * as Yup from 'yup';
 
 import history from '~/services/history';
 import api from '~/services/api';
 import SelectInput from './SelectInput';
 
 import { Container, Title, Actions, Content } from './styles';
+
+const schema = Yup.object().shape({
+  product: Yup.string().required('É obrigatório informar o Produto'),
+  recipient: Yup.array().required('É obrigatório informar um Destinatário'),
+  deliveryman: Yup.array().required('É obrigatório informar um Entregador'),
+});
 
 export default function OrderForm() {
   const { state } = useLocation();
@@ -147,6 +154,7 @@ export default function OrderForm() {
           id="form-order"
           initialData={state ? state.data : ''}
           onSubmit={handleSubmit}
+          schema={schema}
         >
           <div className="contentInputs">
             <div className="selectInput">
@@ -156,7 +164,11 @@ export default function OrderForm() {
                 placeholder="Selecione um destinatário"
                 options={recipients}
                 EditActive={
-                  state.data.recipient ? state.data.recipient.name : ''
+                  state
+                    ? state.data.recipient
+                      ? state.data.recipient.name
+                      : ''
+                    : ''
                 }
               />
             </div>
@@ -167,7 +179,11 @@ export default function OrderForm() {
                 placeholder="Selecione um entregador"
                 options={deliverymans}
                 EditActive={
-                  state.data.deliveryman ? state.data.deliveryman.name : ''
+                  state
+                    ? state.data.deliveryman
+                      ? state.data.deliveryman.name
+                      : ''
+                    : ''
                 }
               />
             </div>

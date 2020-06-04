@@ -95,6 +95,11 @@ export const Content = styled.div`
       font-weight: bold;
       margin-bottom: 5px;
     }
+
+    span {
+      color: red;
+      font-weight: bold;
+    }
   }
 
   div.info {

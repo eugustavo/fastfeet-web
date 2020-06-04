@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { Form, Input } from '@rocketseat/unform';
 import { FaChevronLeft, FaCheck } from 'react-icons/fa';
 import { toast } from 'react-toastify';
+import * as Yup from 'yup';
 
 import history from '~/services/history';
 import api from '~/services/api';
@@ -10,6 +11,13 @@ import api from '~/services/api';
 import AvatarInput from './AvatarInput';
 
 import { Container, Title, Actions, Content } from './styles';
+
+const schema = Yup.object().shape({
+  name: Yup.string().required('O nome é obrigatório'),
+  email: Yup.string()
+    .email('Insira um e-mail válido')
+    .required('O e-mail é obrigatorio'),
+});
 
 export default function DeliverymanForm() {
   const { state } = useLocation();
@@ -79,6 +87,7 @@ export default function DeliverymanForm() {
           id="form-deliveryman"
           initialData={state ? state.data : ''}
           onSubmit={handleSubmit}
+          schema={schema}
         >
           <AvatarInput name="avatar_id" />
 

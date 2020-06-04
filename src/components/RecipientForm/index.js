@@ -1,4 +1,5 @@
 import React from 'react';
+import * as Yup from 'yup';
 import InputMask from 'react-input-mask';
 import { useLocation } from 'react-router-dom';
 import { Form, Input } from '@rocketseat/unform';
@@ -9,6 +10,18 @@ import history from '~/services/history';
 import api from '~/services/api';
 
 import { Container, Title, Actions, Content } from './styles';
+
+const schema = Yup.object().shape({
+  name: Yup.string().required('É obrigatório informar o nome do destinatário'),
+  street: Yup.string().required('É obrigatório informar o nome do rua'),
+  street_number: Yup.string().required(
+    'É obrigatório informar o número do rua'
+  ),
+  complement: Yup.string().required('É obrigatório informar o complemento'),
+  city: Yup.string().required('É obrigatório informar o nome da cidade'),
+  state: Yup.string().required('É obrigatório informar as siglas da estado'),
+  zipcode: Yup.string().required('É obrigatório informar o CEP'),
+});
 
 export default function RecipientForm() {
   const { state } = useLocation();
@@ -88,6 +101,7 @@ export default function RecipientForm() {
           id="form-recipient"
           initialData={state ? state.data : ''}
           onSubmit={handleSubmit}
+          schema={schema}
         >
           <label htmlFor="name"> Nome </label>
           <Input name="name" placeholder="Nome completo" />

@@ -89,6 +89,11 @@ export const Content = styled.div`
       margin-bottom: 20px;
     }
 
+    span {
+      color: red;
+      font-weight: bold;
+    }
+
     label {
       color: #444;
       font-weight: bold;

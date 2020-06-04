@@ -99,6 +99,11 @@ export const Content = styled.div`
       width: 100%;
     }
 
+    span {
+      color: red;
+      font-weight: bold;
+    }
+
     div.inputProduct {
       display: flex;
       flex-direction: column;
